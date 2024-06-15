@@ -19,10 +19,21 @@ type MapProps = {
 	markers: MarkerType[];
 };
 
-const PACKAGE_SIZE_COLORS = {
+const PACKAGE_SIZE_COLOURS = {
 	[MARKER_ENUM.SMALL]: 'green',
 	[MARKER_ENUM.MEDIUM]: 'yellow',
 	[MARKER_ENUM.LARGE]: 'blue',
+};
+
+const generateCustomIcon = (colour: string) => {
+	return {
+		path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z',
+		fillColor: colour, // change the background color here
+		fillOpacity: 1,
+		strokeWeight: 0,
+		scale: 1.5,
+		anchor: new window.google.maps.Point(5, 10),
+	};
 };
 
 function Map({ markers = [] }: MapProps) {
@@ -55,14 +66,9 @@ function Map({ markers = [] }: MapProps) {
 				<Marker
 					position={{ lat: marker.lat, lng: marker.lng }}
 					key={idx}
-					icon={{
-						path: 'M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z',
-						fillColor: PACKAGE_SIZE_COLORS[marker.type || MARKER_ENUM.MEDIUM], // change the background color here
-						fillOpacity: 1,
-						strokeWeight: 0,
-						scale: 1.5,
-						anchor: new window.google.maps.Point(5, 10),
-					}}
+					icon={generateCustomIcon(
+						PACKAGE_SIZE_COLOURS[marker.type || MARKER_ENUM.MEDIUM],
+					)}
 				></Marker>
 			))}
 		</GoogleMap>
