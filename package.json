@@ -32,6 +32,8 @@
 		]
 	},
 	"dependencies": {
+		"@react-google-maps/api": "^2.19.3",
+		"@types/google-map-react": "^2.1.10",
 		"dotenv": "^16.4.5",
 		"formik": "^2.4.5",
 		"jwt-decode": "^4.0.0",
