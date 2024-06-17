@@ -1,42 +1,83 @@
-import { useState } from 'react';
+import { useHome } from './useHome';
 
 import Map from '@/components/map';
-import SidePannel from '@/components/map/MarkerModal';
+import { AssignDriverForm } from '@/components/map/AssignDriverForm';
+import { CreateMarkerForm } from '@/components/map/CreateMarkerForm';
+import MarkerListSection from '@/components/map/MarkerList';
 import { Button } from '@/components/shared/Button';
-import { MarkerType } from '@/interfaces/map/Marker';
+import CustomModal from '@/components/shared/Modal';
+import { MODAL_ENUM } from '@/interfaces/map/Marker';
 
 export default function Home() {
-	const [markers, setMarkers] = useState<MarkerType[]>([]);
-	const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
-
-	const handleAddMarkerButtonOnClick = () => {
-		setIsSidePanelOpen(true);
-	};
-
-	const handleAddMarker = (newMarker: MarkerType) => {
-		console.log(newMarker);
-		setMarkers([...markers, newMarker]);
-	};
-
-	const handleCloseSidePannel = () => {
-		setIsSidePanelOpen(false);
-	};
+	const {
+		currentModelOpen,
+		handleAddMarker,
+		handleAddMarkerButtonOnClick,
+		handleAssignDriver,
+		handleClearSelectedMarkers,
+		handleCloseSidePannel,
+		handleOpenAssignDriverModel,
+		handleSelectMarker,
+		markers,
+		selectedMarkers,
+		currentMarker,
+		handleRemoveCurrentMarker,
+		handleRemoveSelectedMarker,
+		handleAddCurrentMarker,
+	} = useHome();
 
 	return (
-		<div className="flex items-center justify-center h-screen flex-col">
-			{/* data-test? https://docs.cypress.io/guides/references/best-practices */}
-			<h1 className="text-3xl font-bold underline" data-test="home-msg">
-				<Button
-					text="Agregar marcador"
-					onClick={handleAddMarkerButtonOnClick}
-				/>
-				<Map markers={markers} />
-				<SidePannel
-					isOpen={isSidePanelOpen}
-					onClose={handleCloseSidePannel}
-					onClickButton={handleAddMarker}
-				></SidePannel>
-			</h1>
+		<div className="flex  justify-evenly h-screen mt-5">
+			<div className="flex flex-col">
+				<MarkerListSection
+					markers={markers}
+					selectedMarkers={selectedMarkers}
+					assignDriverOnClick={handleOpenAssignDriverModel}
+					clearSelectedMarkersOnClick={handleClearSelectedMarkers}
+				></MarkerListSection>
+			</div>
+			<div className="flex">
+				<div className="flex flex-col">
+					<Button
+						text="Agregar marcador"
+						onClick={handleAddMarkerButtonOnClick}
+					/>
+					<Map
+						markers={markers}
+						currentMarker={currentMarker}
+						infoWindowOnClose={handleRemoveCurrentMarker}
+						markerOnClick={handleAddCurrentMarker}
+						infoWindowOnClick={() => {
+							currentMarker
+								? selectedMarkers.includes(currentMarker)
+									? handleRemoveSelectedMarker(currentMarker.name)
+									: handleSelectMarker(currentMarker.name)
+								: () => {
+										console.log('no marker');
+								  };
+						}}
+						infoWindowButtonText={
+							currentMarker
+								? selectedMarkers.includes(currentMarker)
+									? 'deseleccionar'
+									: 'seleccionar'
+								: 'seleccionar'
+						}
+					></Map>
+
+					<CustomModal
+						isOpen={Boolean(currentModelOpen)}
+						onClose={handleCloseSidePannel}
+					>
+						{currentModelOpen === MODAL_ENUM.CREATE_MARKER && (
+							<CreateMarkerForm onClickButton={handleAddMarker} />
+						)}
+						{currentModelOpen === MODAL_ENUM.ASSIGN_DRIVER && (
+							<AssignDriverForm onClickButton={handleAssignDriver} />
+						)}
+					</CustomModal>
+				</div>
+			</div>
 		</div>
 	);
 }
