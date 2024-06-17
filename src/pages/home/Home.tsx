@@ -3,10 +3,11 @@ import { useHome } from './useHome';
 import Map from '@/components/map';
 import { AssignDriverForm } from '@/components/map/AssignDriverForm';
 import { CreateMarkerForm } from '@/components/map/CreateMarkerForm';
-import MarkerListSection from '@/components/map/MarkerList';
 import { Button } from '@/components/shared/Button';
 import CustomModal from '@/components/shared/Modal';
 import { MODAL_ENUM } from '@/interfaces/map/Marker';
+
+import MarkerListSection from '@components/map/MarkerListSection';
 
 export default function Home() {
 	const {

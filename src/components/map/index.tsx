@@ -83,24 +83,29 @@ function Map({
 			{/* Child components, such as markers, info windows, etc. */}
 			{markers.map((marker, idx) => (
 				<Marker
-					position={{ lat: marker.lat, lng: marker.lng }}
+					title={marker.name}
+					position={{ lat: marker.latitude, lng: marker.longitude }}
 					key={idx}
 					icon={generateCustomIcon(
-						PACKAGE_SIZE_COLOURS[marker.type || MARKER_ENUM.MEDIUM],
+						PACKAGE_SIZE_COLOURS[marker.size || MARKER_ENUM.MEDIUM],
 					)}
 					onClick={() => markerOnClick(marker)}
 				></Marker>
 			))}
 			{currentMarker && (
 				<InfoWindowF
-					position={{ ...currentMarker }}
+					position={{
+						lat: currentMarker.latitude,
+						lng: currentMarker.longitude,
+					}}
 					onCloseClick={infoWindowOnClose}
 				>
-					<div className="flex flex-col">
+					<div className="flex flex-col" data-test="info-window-container">
 						<h1>Nombre: {currentMarker.name}</h1>
-						<p>Tamaño de paquete: {currentMarker.type || 'no definido'}</p>
+						<p>Tamaño de paquete: {currentMarker.size || 'no definido'}</p>
 						<p>Asignado a: {currentMarker.asignee || 'no definido'}</p>
 						<Button
+							dataTest="info-window-button"
 							onClick={infoWindowOnClick}
 							text={infoWindowButtonText}
 						></Button>

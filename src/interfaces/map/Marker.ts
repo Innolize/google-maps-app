@@ -1,8 +1,8 @@
 export type MarkerType = {
 	name: string;
-	lat: number;
-	lng: number;
-	type?: MARKER_ENUM;
+	latitude: number;
+	longitude: number;
+	size?: MARKER_ENUM;
 	asignee?: string;
 };
 
