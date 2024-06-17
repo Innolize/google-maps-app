@@ -1,5 +1,12 @@
-import { GoogleMap, Marker, useJsApiLoader } from '@react-google-maps/api';
+import {
+	GoogleMap,
+	InfoWindowF,
+	Marker,
+	useJsApiLoader,
+} from '@react-google-maps/api';
 import React, { useCallback } from 'react';
+
+import { Button } from '../shared/Button';
 
 import { MARKER_ENUM, MarkerType } from '@/interfaces/map/Marker';
 
@@ -17,6 +24,11 @@ const GOOGLE_MAP_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
 
 type MapProps = {
 	markers: MarkerType[];
+	infoWindowOnClick: (marker: MarkerType) => void;
+	infoWindowButtonText: string;
+	currentMarker: MarkerType | null;
+	infoWindowOnClose: () => void;
+	markerOnClick: (marker: MarkerType) => void;
 };
 
 const PACKAGE_SIZE_COLOURS = {
@@ -36,7 +48,14 @@ const generateCustomIcon = (colour: string) => {
 	};
 };
 
-function Map({ markers = [] }: MapProps) {
+function Map({
+	markers = [],
+	infoWindowOnClick,
+	infoWindowButtonText,
+	infoWindowOnClose,
+	currentMarker,
+	markerOnClick,
+}: MapProps) {
 	const { isLoaded } = useJsApiLoader({
 		id: 'google-map-script',
 		googleMapsApiKey: GOOGLE_MAP_API_KEY,
@@ -69,12 +88,31 @@ function Map({ markers = [] }: MapProps) {
 					icon={generateCustomIcon(
 						PACKAGE_SIZE_COLOURS[marker.type || MARKER_ENUM.MEDIUM],
 					)}
+					onClick={() => markerOnClick(marker)}
 				></Marker>
 			))}
+			{currentMarker && (
+				<InfoWindowF
+					position={{ ...currentMarker }}
+					onCloseClick={infoWindowOnClose}
+				>
+					<div className="flex flex-col">
+						<h1>Nombre: {currentMarker.name}</h1>
+						<p>Tamaño de paquete: {currentMarker.type || 'no definido'}</p>
+						<p>Asignado a: {currentMarker.asignee || 'no definido'}</p>
+						<Button
+							onClick={infoWindowOnClick}
+							text={infoWindowButtonText}
+						></Button>
+					</div>
+				</InfoWindowF>
+			)}
 		</GoogleMap>
 	) : (
 		<></>
 	);
 }
 
-export default React.memo(Map);
+export const MemoizedMap = React.memo(Map);
+
+export default MemoizedMap;
