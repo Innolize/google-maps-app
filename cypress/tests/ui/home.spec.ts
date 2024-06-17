@@ -64,7 +64,7 @@ describe('Home', () => {
 		);
 	});
 
-	it.only('Should asssign a driver to selected marker', () => {
+	it('Should asssign a driver to selected marker', () => {
 		cy.get(`[title="${INITIAL_MARKER.NAME}"]`).as('initialMarker');
 		cy.get('@initialMarker').click();
 		cy.get('[data-test="info-window-container"]').as('info-window-container');
