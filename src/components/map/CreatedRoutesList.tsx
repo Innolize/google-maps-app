@@ -2,15 +2,15 @@ import { Button } from '../shared/Button';
 
 import { MARKER_ENUM, MarkerType } from '@/interfaces/map/Marker';
 
-export const MarkerList = ({ markers }: { markers: MarkerType[] }) => {
+export const CreatedRoutesList = ({ markers }: { markers: MarkerType[] }) => {
+	const createdRoutes = markers.filter((marker) => marker.asignee);
 	return (
-		<div className="flex flex-1 items-center flex-col" data-test="marker-list">
+		<div className="flex flex-1 items-center flex-col">
 			<ul role="list" className="divide-y divide-gray-100 min-h-[300px]">
-				{markers.map((marker, idx) => (
+				{createdRoutes.map((marker, idx) => (
 					<li
 						key={idx}
 						className="flex items-center justify-between gap-x-6 py-5"
-						data-test={`item-${marker.name}`}
 					>
 						<div className="flex min-w-0 gap-x-4">
 							<div className="min-w-0 flex-auto">
