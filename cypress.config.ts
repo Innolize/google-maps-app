@@ -13,7 +13,10 @@ export default defineConfig({
 	video: false,
 	screenshotOnRunFailure: false,
 	port: process.env.CYPRESS_HOST_PORT ? +process.env.CYPRESS_HOST_PORT : 4000,
+
 	e2e: {
+		viewportWidth: 1920,
+		viewportHeight: 1080,
 		setupNodeEvents(on, config) {
 			registerCodeCoverageTasks(on, config);
 			const __filename = fileURLToPath(import.meta.url);
