@@ -59,7 +59,9 @@ export const useHome = () => {
 	const handleAssignDriver = (driver: string) => {
 		const newMarkerArray = markers.map((marker) => {
 			const updatedItem = selectedMarkers.find(
-				(item) => item.lat === marker.lat && item.lng === marker.lng,
+				(item) =>
+					item.latitude === marker.latitude &&
+					item.longitude === marker.longitude,
 			);
 
 			return updatedItem ? { ...marker, asignee: driver } : marker;
@@ -68,6 +70,7 @@ export const useHome = () => {
 		setMarkers(newMarkerArray);
 		setSelectedMarkers([]);
 		setCurrentModelOpen(null);
+		setCurrentMarker(null);
 	};
 
 	return {
